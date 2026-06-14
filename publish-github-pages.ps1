@@ -237,10 +237,12 @@ if ($AuthMode -eq "gh") {
       Write-Host "Repository already exists: $account/$RepoName"
       Invoke-Git remote add origin "https://github.com/$account/$RepoName.git"
     } else {
-      gh repo create $RepoName $visibility --source . --remote origin
+      $privateValue = if ($Private) { "true" } else { "false" }
+      gh api -X POST "user/repos" -f "name=$RepoName" -F "private=$privateValue" -f "description=Subject-based study card app" -F "auto_init=false" *> $null
       if ($LASTEXITCODE -ne 0) {
-        Fail "gh repo create failed."
+        Fail "GitHub repository creation failed."
       }
+      Invoke-Git remote add origin "https://github.com/$account/$RepoName.git"
     }
   }
 
