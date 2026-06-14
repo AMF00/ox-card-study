@@ -4,9 +4,9 @@
 
 ## 휴대폰에서 쓰는 방법
 
-1. GitHub CLI를 설치하고 `gh auth login`으로 로그인합니다.
+1. GitHub CLI를 설치하고 `gh auth login`으로 로그인합니다. 또는 `GITHUB_TOKEN` 환경변수를 설정합니다.
 2. 이 폴더에서 `.\publish-github-pages.ps1`을 실행합니다.
-3. 저장소의 `Settings > Pages`에서 `GitHub Actions` 배포가 선택되어 있는지 확인합니다.
+3. 스크립트가 저장소 생성, 푸시, GitHub Pages 활성화를 시도합니다.
 4. 배포가 끝난 뒤 `https://<계정>.github.io/<저장소>/` 주소를 휴대폰 브라우저에서 엽니다.
 5. iPhone은 Safari 공유 메뉴에서 `홈 화면에 추가`, Android는 Chrome 메뉴에서 `홈 화면에 추가`를 선택합니다.
 
@@ -15,6 +15,8 @@
 ```powershell
 .\publish-github-pages.ps1 -RepoName my-ox-cards
 ```
+
+`GITHUB_TOKEN` 방식은 저장소 생성과 Pages 설정을 위해 GitHub API 권한이 필요합니다. classic token은 `repo` 범위가 필요하고, fine-grained token은 저장소 생성 권한과 Pages/Administration 쓰기 권한이 필요합니다.
 
 ## 데이터 이동
 
