@@ -2,69 +2,35 @@
 
 ## Current state
 
-- Local static app is complete.
-- Git repository is initialized on `main`.
-- Local commits exist for the app and deployment preparation; use `git log -1 --oneline` for the current latest commit.
-- GitHub Pages workflow exists at `.github/workflows/pages.yml`.
-- `publish-github-pages.ps1` can publish with either an authenticated GitHub CLI session or a `GITHUB_TOKEN`.
-- `start-phone-link.ps1` can create a temporary phone link through a local static server and localhost.run SSH tunnel.
-- `refresh-phone-link.ps1` updates `PHONE_LINK.txt` when localhost.run issues a new tunnel URL.
-- `publish-netlify-drop.ps1` is ready to create a Netlify Drop URL by uploading only the static app files.
-- Mobile install metadata exists in `manifest.webmanifest` and `favicon.svg`.
-- Runtime tunnel files are intentionally ignored by Git.
+- GitHub Pages fixed URL is live.
+- Repository: `https://github.com/AMF00/ox-card-study`
+- Pages URL: `https://amf00.github.io/ox-card-study/`
+- Repository visibility: public
+- Default branch: `main`
+- Pages build type: GitHub Actions workflow
+- Pages HTTPS enforcement: enabled
 
-## Verified locally
+## Verified
 
-- `node --check app.js` passed.
-- `manifest.webmanifest` parsed as JSON.
-- `sample-deck.json` parsed as JSON.
-- HTML references `manifest.webmanifest` and `favicon.svg`.
-- GitHub Pages workflow uploads the repository root and deploys with GitHub Pages actions.
-- Temporary phone tunnel was created and verified through `localhost.run` / `lhr.life`.
-- Public tunnel returned the app HTML, CSS, JS, manifest, and icon assets.
-- Browser verification confirmed the public URL renders the subject selector and sample decks.
-- `publish-netlify-drop.ps1` and `refresh-phone-link.ps1` parse successfully in PowerShell.
-- `refresh-phone-link.ps1` refreshed `PHONE_LINK.txt` to the latest observed tunnel URL.
+- `node --check app.js` passed before deployment.
+- `manifest.webmanifest` parsed as JSON before deployment.
+- `sample-deck.json` parsed as JSON before deployment.
+- `.github/workflows/pages.yml` exists and deploys the repository root.
+- GitHub repository `AMF00/ox-card-study` exists.
+- Git remote `origin` points to `https://github.com/AMF00/ox-card-study.git`.
+- GitHub Pages API reports `html_url` as `https://amf00.github.io/ox-card-study/`.
+- Public Pages root URL returns HTTP 200.
+- Public Pages root HTML contains `<title>학습 카드</title>`.
+- Public Pages asset checks returned HTTP 200 for:
+  - `styles.css`
+  - `app.js`
+  - `manifest.webmanifest`
+  - `favicon.svg`
+  - `sample-deck.json`
 
-## External deployment blocker
+## Notes
 
-I could not create the GitHub repository or push the branch autonomously because no authenticated GitHub path is currently available in this environment:
-
-- `gh` is not installed.
-- No `GITHUB_TOKEN` or other matching deployment token environment variable is present.
-- GitHub credential lookup returned no saved username or secret when interactive prompts were disabled.
-- Browser access to `https://github.com/new` redirects to the GitHub sign-in page.
-
-Netlify Drop can create a no-account temporary URL, but it uploads project files to Netlify. The script is prepared, but executing it requires explicit approval for that external upload.
-
-## Ready-to-run next step
-
-After GitHub CLI is installed and authenticated, or after `GITHUB_TOKEN` is set, run this from the project folder:
-
-```powershell
-.\publish-github-pages.ps1
-```
-
-The script creates a public repository named `ox-card-study` by default, pushes `main`, and lets the included GitHub Pages workflow deploy the app.
-
-For a temporary phone link without GitHub authentication, run:
-
-```powershell
-.\start-phone-link.ps1
-```
-
-This uses the installed OpenSSH client and localhost.run. It is not a permanent deployment; the URL only works while the PC and tunnel process stay running.
-
-If a link is currently running, its URL and process IDs are stored in `PHONE_LINK.txt`.
-
-To refresh `PHONE_LINK.txt` after localhost.run reconnects and prints a new URL:
-
-```powershell
-.\refresh-phone-link.ps1
-```
-
-For a temporary Netlify-hosted link after approving external upload of the static app files:
-
-```powershell
-.\publish-netlify-drop.ps1
-```
+- The app is public because GitHub Pages serves static files publicly.
+- User-created cards and study history remain in each browser's `localStorage`.
+- PC and phone browser data are not automatically synchronized.
+- Move card data between devices with the app's JSON export/import.
