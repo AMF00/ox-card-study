@@ -4,11 +4,17 @@
 
 ## 휴대폰에서 쓰는 방법
 
-1. GitHub 저장소에 이 폴더의 파일을 올립니다.
-2. 저장소의 `Settings > Pages`에서 `GitHub Actions` 배포를 선택합니다.
-3. `main` 브랜치에 푸시하면 `.github/workflows/pages.yml`이 정적 사이트를 배포합니다.
+1. GitHub CLI를 설치하고 `gh auth login`으로 로그인합니다.
+2. 이 폴더에서 `.\publish-github-pages.ps1`을 실행합니다.
+3. 저장소의 `Settings > Pages`에서 `GitHub Actions` 배포가 선택되어 있는지 확인합니다.
 4. 배포가 끝난 뒤 `https://<계정>.github.io/<저장소>/` 주소를 휴대폰 브라우저에서 엽니다.
 5. iPhone은 Safari 공유 메뉴에서 `홈 화면에 추가`, Android는 Chrome 메뉴에서 `홈 화면에 추가`를 선택합니다.
+
+기본 저장소 이름은 `ox-card-study`입니다. 다른 이름을 쓰려면 아래처럼 실행합니다.
+
+```powershell
+.\publish-github-pages.ps1 -RepoName my-ox-cards
+```
 
 ## 데이터 이동
 
