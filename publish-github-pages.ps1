@@ -34,11 +34,17 @@ function Invoke-Git {
 
 function Get-GitOutput {
   param([Parameter(ValueFromRemainingArguments = $true)][string[]]$GitArgs)
-  $output = & git -c "safe.directory=$RepoRoot" @GitArgs 2>$null
-  if ($LASTEXITCODE -ne 0) {
-    return $null
+  $previousErrorActionPreference = $ErrorActionPreference
+  $ErrorActionPreference = "Continue"
+  try {
+    $output = & git -c "safe.directory=$RepoRoot" @GitArgs 2>$null
+    if ($LASTEXITCODE -ne 0) {
+      return $null
+    }
+    return $output
+  } finally {
+    $ErrorActionPreference = $previousErrorActionPreference
   }
-  return $output
 }
 
 function Invoke-GitHubApi($Method, $Uri, $Body = $null) {
@@ -211,9 +217,20 @@ $repo = $null
 
 if ($AuthMode -eq "gh") {
   if (-not $remote) {
-    gh repo create $RepoName $visibility --source . --remote origin
-    if ($LASTEXITCODE -ne 0) {
-      Fail "gh repo create failed."
+    $account = gh api user --jq .login
+    if ($LASTEXITCODE -ne 0 -or -not $account) {
+      Fail "Could not determine GitHub account from gh."
+    }
+
+    gh repo view "$account/$RepoName" *> $null
+    if ($LASTEXITCODE -eq 0) {
+      Write-Host "Repository already exists: $account/$RepoName"
+      Invoke-Git remote add origin "https://github.com/$account/$RepoName.git"
+    } else {
+      gh repo create $RepoName $visibility --source . --remote origin
+      if ($LASTEXITCODE -ne 0) {
+        Fail "gh repo create failed."
+      }
     }
   }
 
