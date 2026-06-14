@@ -34,6 +34,22 @@ GitHub 인증 없이 지금 휴대폰에서 열어야 한다면 아래 명령으
 .\stop-phone-link.ps1
 ```
 
+터널이 재연결되면서 주소가 바뀐 경우에는 아래 명령으로 `PHONE_LINK.txt`를 최신 주소로 갱신합니다.
+
+```powershell
+.\refresh-phone-link.ps1
+```
+
+### 1시간 링크: Netlify Drop
+
+GitHub 로그인 없이 PC와 독립적인 임시 공개 링크가 필요하면 Netlify Drop 배포 스크립트를 사용할 수 있습니다.
+
+```powershell
+.\publish-netlify-drop.ps1
+```
+
+이 방식은 `index.html`, `styles.css`, `app.js`, `sample-deck.json`, `manifest.webmanifest`, `favicon.svg`만 Netlify에 업로드합니다. Netlify의 익명 Drop 링크는 임시 링크이며, Netlify가 익명 프로젝트에 비밀번호 `My-Drop-Site`를 요구할 수 있습니다.
+
 ## 데이터 이동
 
 - PC와 휴대폰의 저장소는 서로 자동 동기화되지 않습니다.

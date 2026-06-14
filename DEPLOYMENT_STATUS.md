@@ -8,6 +8,8 @@
 - GitHub Pages workflow exists at `.github/workflows/pages.yml`.
 - `publish-github-pages.ps1` can publish with either an authenticated GitHub CLI session or a `GITHUB_TOKEN`.
 - `start-phone-link.ps1` can create a temporary phone link through a local static server and localhost.run SSH tunnel.
+- `refresh-phone-link.ps1` updates `PHONE_LINK.txt` when localhost.run issues a new tunnel URL.
+- `publish-netlify-drop.ps1` is ready to create a Netlify Drop URL by uploading only the static app files.
 - Mobile install metadata exists in `manifest.webmanifest` and `favicon.svg`.
 - Runtime tunnel files are intentionally ignored by Git.
 
@@ -21,6 +23,8 @@
 - Temporary phone tunnel was created and verified through `localhost.run` / `lhr.life`.
 - Public tunnel returned the app HTML, CSS, JS, manifest, and icon assets.
 - Browser verification confirmed the public URL renders the subject selector and sample decks.
+- `publish-netlify-drop.ps1` and `refresh-phone-link.ps1` parse successfully in PowerShell.
+- `refresh-phone-link.ps1` refreshed `PHONE_LINK.txt` to the latest observed tunnel URL.
 
 ## External deployment blocker
 
@@ -30,6 +34,8 @@ I could not create the GitHub repository or push the branch autonomously because
 - No `GITHUB_TOKEN` or other matching deployment token environment variable is present.
 - GitHub credential lookup returned no saved username or secret when interactive prompts were disabled.
 - Browser access to `https://github.com/new` redirects to the GitHub sign-in page.
+
+Netlify Drop can create a no-account temporary URL, but it uploads project files to Netlify. The script is prepared, but executing it requires explicit approval for that external upload.
 
 ## Ready-to-run next step
 
@@ -50,3 +56,15 @@ For a temporary phone link without GitHub authentication, run:
 This uses the installed OpenSSH client and localhost.run. It is not a permanent deployment; the URL only works while the PC and tunnel process stay running.
 
 If a link is currently running, its URL and process IDs are stored in `PHONE_LINK.txt`.
+
+To refresh `PHONE_LINK.txt` after localhost.run reconnects and prints a new URL:
+
+```powershell
+.\refresh-phone-link.ps1
+```
+
+For a temporary Netlify-hosted link after approving external upload of the static app files:
+
+```powershell
+.\publish-netlify-drop.ps1
+```
