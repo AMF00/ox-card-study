@@ -1,23 +1,54 @@
 param(
   [string]$RepoName = "ox-card-study",
-  [switch]$Private
+  [switch]$Private,
+  [int]$PagesWaitSeconds = 240
 )
 
 $ErrorActionPreference = "Stop"
+$RepoRoot = (Resolve-Path ".").Path
+$AuthMode = $null
+$GitHubToken = $null
 
 function Fail($Message) {
   Write-Error $Message
   exit 1
 }
 
+function Get-GitHubToken {
+  if ($env:GITHUB_TOKEN) {
+    return $env:GITHUB_TOKEN
+  }
+  if ($env:GH_TOKEN) {
+    return $env:GH_TOKEN
+  }
+  return $null
+}
+
+function Invoke-Git {
+  param([Parameter(ValueFromRemainingArguments = $true)][string[]]$GitArgs)
+  & git -c "safe.directory=$RepoRoot" @GitArgs
+  if ($LASTEXITCODE -ne 0) {
+    Fail "git $($GitArgs -join ' ') failed."
+  }
+}
+
+function Get-GitOutput {
+  param([Parameter(ValueFromRemainingArguments = $true)][string[]]$GitArgs)
+  $output = & git -c "safe.directory=$RepoRoot" @GitArgs 2>$null
+  if ($LASTEXITCODE -ne 0) {
+    return $null
+  }
+  return $output
+}
+
 function Invoke-GitHubApi($Method, $Uri, $Body = $null) {
-  if (-not $env:GITHUB_TOKEN) {
-    Fail "GITHUB_TOKEN is not set."
+  if (-not $GitHubToken) {
+    Fail "Neither GITHUB_TOKEN nor GH_TOKEN is set."
   }
 
   $headers = @{
     "Accept" = "application/vnd.github+json"
-    "Authorization" = "Bearer $env:GITHUB_TOKEN"
+    "Authorization" = "Bearer $GitHubToken"
     "X-GitHub-Api-Version" = "2022-11-28"
   }
 
@@ -37,40 +68,42 @@ function Invoke-GitHubApi($Method, $Uri, $Body = $null) {
 
 function Ensure-GitRepository {
   if (-not (Test-Path ".git")) {
-    git init -b main
+    Invoke-Git init -b main
   }
 
-  $status = git status --short
+  $status = Get-GitOutput status --short
   if ($status) {
-    git add .
-    git commit -m "Prepare OX card app for GitHub Pages"
+    Invoke-Git add .
+    Invoke-Git commit -m "Prepare study card app for GitHub Pages"
   }
 }
 
-function Push-WithToken($RemoteUrl) {
-  $askPass = Join-Path ([System.IO.Path]::GetTempPath()) ("git-askpass-ox-card-" + [System.Guid]::NewGuid().ToString("N") + ".cmd")
+function Push-WithToken($RemoteName) {
+  $askPass = Join-Path ([System.IO.Path]::GetTempPath()) ("git-askpass-study-card-" + [System.Guid]::NewGuid().ToString("N") + ".cmd")
   Set-Content -Encoding ASCII -Path $askPass -Value @"
 @echo off
 echo %* | findstr /I "Username" >nul
 if %ERRORLEVEL% EQU 0 (
   echo x-access-token
 ) else (
-  echo %GITHUB_TOKEN%
+  echo %PUBLISH_GITHUB_TOKEN%
 )
 "@
 
   try {
     $env:GIT_TERMINAL_PROMPT = "0"
     $env:GIT_ASKPASS = $askPass
-    git push -u $RemoteUrl main
+    $env:PUBLISH_GITHUB_TOKEN = $GitHubToken
+    Invoke-Git push -u $RemoteName main
   } finally {
     Remove-Item -LiteralPath $askPass -Force -ErrorAction SilentlyContinue
     Remove-Item Env:GIT_ASKPASS -ErrorAction SilentlyContinue
+    Remove-Item Env:PUBLISH_GITHUB_TOKEN -ErrorAction SilentlyContinue
   }
 }
 
 function Get-OriginOwnerRepo {
-  $origin = git remote get-url origin 2>$null
+  $origin = Get-GitOutput remote get-url origin
   if ($origin -match "github.com[:/](?<owner>[^/]+)/(?<repo>.+?)(?:\.git)?$") {
     return @{
       Owner = $Matches.owner
@@ -104,44 +137,100 @@ function Enable-PagesWithToken($Owner, $Repo) {
   }
 }
 
+function Get-PagesInfo($Owner, $Repo) {
+  try {
+    if ($AuthMode -eq "gh") {
+      $raw = gh api "repos/$Owner/$Repo/pages"
+      if ($LASTEXITCODE -ne 0 -or -not $raw) {
+        return $null
+      }
+      return $raw | ConvertFrom-Json
+    }
+
+    return Invoke-GitHubApi -Method "GET" -Uri "https://api.github.com/repos/$Owner/$Repo/pages"
+  } catch {
+    return $null
+  }
+}
+
+function Wait-ForPages($Owner, $Repo, $TimeoutSeconds) {
+  $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+  do {
+    $pages = Get-PagesInfo -Owner $Owner -Repo $Repo
+    if ($pages -and $pages.html_url) {
+      return $pages
+    }
+    Start-Sleep -Seconds 5
+  } while ((Get-Date) -lt $deadline)
+
+  return $null
+}
+
+function Wait-ForPublicUrl($Url, $TimeoutSeconds) {
+  $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
+  do {
+    try {
+      $response = Invoke-WebRequest -UseBasicParsing -Uri $Url -Method Get -TimeoutSec 15
+      if ($response.StatusCode -ge 200 -and $response.StatusCode -lt 400) {
+        return $true
+      }
+    } catch {
+      Start-Sleep -Seconds 6
+    }
+  } while ((Get-Date) -lt $deadline)
+
+  return $false
+}
+
 $visibility = if ($Private) { "--private" } else { "--public" }
 $hasGh = [bool](Get-Command gh -ErrorAction SilentlyContinue)
 $ghAuthenticated = $false
-$hasToken = [bool]$env:GITHUB_TOKEN
+$GitHubToken = Get-GitHubToken
+$hasToken = [bool]$GitHubToken
 
 if ($hasGh) {
   gh auth status *> $null
   if ($LASTEXITCODE -eq 0) {
     $ghAuthenticated = $true
-  }
-}
-
-if (-not $ghAuthenticated -and -not $hasToken) {
-  Fail "No authenticated GitHub path is available. Install gh and run 'gh auth login', or set GITHUB_TOKEN."
-}
-
-Ensure-GitRepository
-$remote = git remote get-url origin 2>$null
-
-if ($hasGh) {
-  if ($ghAuthenticated) {
-    if (-not $remote) {
-      gh repo create $RepoName $visibility --source . --remote origin --push
-    } else {
-      git push -u origin main
-    }
-    $originInfo = Get-OriginOwnerRepo
-    if ($originInfo) {
-      Enable-PagesWithGh -Owner $originInfo.Owner -Repo $originInfo.Repo
-    }
-  } elseif ($hasToken) {
-    Write-Host "GitHub CLI is installed but not authenticated. Falling back to GITHUB_TOKEN."
+    $AuthMode = "gh"
   }
 }
 
 if (-not $ghAuthenticated -and $hasToken) {
+  $AuthMode = "token"
+}
+
+if (-not $AuthMode) {
+  Fail "No authenticated GitHub path is available. Install GitHub CLI and run 'gh auth login', or set GITHUB_TOKEN/GH_TOKEN."
+}
+
+Ensure-GitRepository
+$remote = Get-GitOutput remote get-url origin
+$owner = $null
+$repo = $null
+
+if ($AuthMode -eq "gh") {
+  if (-not $remote) {
+    gh repo create $RepoName $visibility --source . --remote origin
+    if ($LASTEXITCODE -ne 0) {
+      Fail "gh repo create failed."
+    }
+  }
+
+  Invoke-Git push -u origin main
+  $originInfo = Get-OriginOwnerRepo
+  if (-not $originInfo) {
+    Fail "Could not determine owner/repo from origin remote."
+  }
+  $owner = $originInfo.Owner
+  $repo = $originInfo.Repo
+  Enable-PagesWithGh -Owner $owner -Repo $repo
+}
+
+if ($AuthMode -eq "token") {
   $user = Invoke-GitHubApi -Method "GET" -Uri "https://api.github.com/user"
   $owner = $user.login
+  $repo = $RepoName
   $repoUri = "https://api.github.com/repos/$owner/$RepoName"
 
   try {
@@ -151,7 +240,7 @@ if (-not $ghAuthenticated -and $hasToken) {
     $createBody = @{
       name = $RepoName
       private = [bool]$Private
-      description = "Subject-based OX card study app"
+      description = "Subject-based study card app"
       auto_init = $false
     }
     Invoke-GitHubApi -Method "POST" -Uri "https://api.github.com/user/repos" -Body $createBody | Out-Null
@@ -159,19 +248,22 @@ if (-not $ghAuthenticated -and $hasToken) {
 
   $remoteUrl = "https://github.com/$owner/$RepoName.git"
   if (-not $remote) {
-    git remote add origin $remoteUrl
+    Invoke-Git remote add origin $remoteUrl
   }
-  Push-WithToken -RemoteUrl "origin"
-  Enable-PagesWithToken -Owner $owner -Repo $RepoName
-} else {
-  $originInfo = Get-OriginOwnerRepo
-  if ($originInfo) {
-    if ($env:GITHUB_TOKEN) {
-      Enable-PagesWithToken -Owner $originInfo.Owner -Repo $originInfo.Repo
-    }
-  }
+  Push-WithToken -RemoteName "origin"
+  Enable-PagesWithToken -Owner $owner -Repo $repo
 }
 
+$pages = Wait-ForPages -Owner $owner -Repo $repo -TimeoutSeconds $PagesWaitSeconds
+$pageUrl = if ($pages -and $pages.html_url) { $pages.html_url } else { "https://$owner.github.io/$repo/" }
+$isLive = Wait-ForPublicUrl -Url $pageUrl -TimeoutSeconds $PagesWaitSeconds
+
 Write-Host ""
-Write-Host "Push complete."
-Write-Host "If Pages was enabled successfully, the deployed URL will appear in the GitHub Actions run for 'Deploy static site to GitHub Pages'."
+Write-Host "Push complete: $owner/$repo"
+Write-Host "Pages URL: $pageUrl"
+
+if ($isLive) {
+  Write-Host "Pages verification: live"
+} else {
+  Write-Host "Pages verification: pending. GitHub may still be building the first deployment."
+}
