@@ -3,12 +3,12 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="과목별 OX 카드덱을 만들고 반복 학습하는 로컬 저장형 학습 앱">
-    <meta name="theme-color" content="#186a5e">
+    <meta name="description" content="과목별 학습 카드를 만들고 반복 학습하는 로컬 저장형 웹앱">
+    <meta name="theme-color" content="#176b87">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="OX 카드">
+    <meta name="apple-mobile-web-app-title" content="학습 카드">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <title>OX 카드 학습</title>
+    <title>학습 카드</title>
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
@@ -16,8 +16,8 @@
   <body>
     <header class="app-header">
       <div>
-        <p class="eyebrow">Local OX Study Cards</p>
-        <h1>OX 카드 학습</h1>
+        <p class="eyebrow">Local Study Cards</p>
+        <h1>학습 카드</h1>
       </div>
       <div class="header-actions">
         <button class="icon-button" id="printButton" type="button" title="인쇄">⎙</button>
@@ -43,11 +43,11 @@
             <strong id="todayCount">0</strong>
           </div>
           <div class="stat">
-            <span>정답률</span>
+            <span>성공률</span>
             <strong id="accuracyRate">0%</strong>
           </div>
           <div class="stat">
-            <span>오답</span>
+            <span>복습 필요</span>
             <strong id="wrongCount">0</strong>
           </div>
           <div class="stat">
@@ -61,7 +61,7 @@
         <nav class="tabs" aria-label="주요 화면">
           <button class="tab active" data-view="studyView" type="button">학습</button>
           <button class="tab" data-view="manageView" type="button">카드 관리</button>
-          <button class="tab" data-view="dataView" type="button">가져오기/내보내기</button>
+          <button class="tab" data-view="dataView" type="button">가져오기·내보내기</button>
           <button class="tab" data-view="printView" type="button">인쇄 보기</button>
         </nav>
 
@@ -69,7 +69,7 @@
           <div class="study-toolbar">
             <div class="segmented" role="group" aria-label="학습 범위">
               <button class="segment active" data-study-mode="all" type="button">전체</button>
-              <button class="segment" data-study-mode="wrong" type="button">오답</button>
+              <button class="segment" data-study-mode="wrong" type="button">복습</button>
               <button class="segment" data-study-mode="weak" type="button">미숙</button>
             </div>
             <button class="button secondary" id="shuffleButton" type="button">섞기</button>
@@ -78,16 +78,24 @@
           <article class="study-card" id="studyCard">
             <div class="card-meta">
               <span id="studyPosition">0 / 0</span>
+              <span id="studyType">상기 카드</span>
               <span id="studyTags"></span>
             </div>
-            <p class="prompt" id="studyPrompt">과목을 추가하거나 샘플 과목을 사용해 학습을 시작하세요.</p>
-            <div class="answer-buttons">
+            <div class="study-face">
+              <span class="face-label">앞면</span>
+              <p class="prompt" id="studyPrompt">과목을 추가하거나 샘플 과목을 사용해 학습을 시작하세요.</p>
+            </div>
+            <div class="answer-buttons" id="answerButtons">
               <button class="answer-button o" data-answer="O" type="button">O</button>
               <button class="answer-button x" data-answer="X" type="button">X</button>
             </div>
+            <div class="recall-actions" id="recallActions" hidden>
+              <button class="button success" data-recall-grade="remembered" type="button">기억함</button>
+              <button class="button warning" data-recall-grade="review" type="button">다시 보기</button>
+            </div>
             <div class="feedback" id="feedback" aria-live="polite"></div>
             <div class="button-row">
-              <button class="button secondary" id="revealButton" type="button">정답 보기</button>
+              <button class="button secondary" id="revealButton" type="button">뒷면 보기</button>
               <button class="button" id="nextButton" type="button">다음 카드</button>
             </div>
           </article>
@@ -99,19 +107,32 @@
               <h2 id="formTitle">카드 추가</h2>
               <input id="editingCardId" type="hidden">
 
-              <label for="promptInput">질문</label>
-              <textarea id="promptInput" rows="5" required placeholder="예: 조선의 수도는 한양이었다."></textarea>
-
-              <label>정답</label>
-              <div class="segmented answer-choice" role="group" aria-label="정답 선택">
-                <button class="segment active" data-form-answer="O" type="button">O</button>
-                <button class="segment" data-form-answer="X" type="button">X</button>
+              <label>카드 종류</label>
+              <div class="segmented card-type-choice" role="group" aria-label="카드 종류 선택">
+                <button class="segment active" data-form-type="recall" type="button">상기 카드</button>
+                <button class="segment" data-form-type="ox" type="button">OX 카드</button>
               </div>
 
-              <label for="explanationInput">해설</label>
-              <textarea id="explanationInput" rows="4" placeholder="왜 맞거나 틀렸는지 적어 두세요."></textarea>
+              <label for="promptInput">앞면 / 질문</label>
+              <textarea id="promptInput" rows="5" required placeholder="앞면에 보여 줄 내용을 적으세요."></textarea>
 
-              <label for="tagsInput">태그(단원/시험범위)</label>
+              <div class="field-group" id="backField">
+                <label for="backInput">뒷면</label>
+                <textarea id="backInput" rows="5" placeholder="떠올려야 할 답, 정의, 설명, 예시를 적으세요."></textarea>
+              </div>
+
+              <div class="field-group" id="oxAnswerField" hidden>
+                <label>정답</label>
+                <div class="segmented answer-choice" role="group" aria-label="정답 선택">
+                  <button class="segment active" data-form-answer="O" type="button">O</button>
+                  <button class="segment" data-form-answer="X" type="button">X</button>
+                </div>
+              </div>
+
+              <label for="explanationInput">추가 메모</label>
+              <textarea id="explanationInput" rows="4" placeholder="암기 팁, 예외, 관련 개념을 적어 두세요."></textarea>
+
+              <label for="tagsInput">태그(단원/시험범위/난이도)</label>
               <input id="tagsInput" type="text" placeholder="1단원, 중간고사, 문법, 암기필수">
 
               <div class="button-row">
@@ -123,7 +144,7 @@
             <section class="panel card-list-panel">
               <div class="list-header">
                 <h2>카드 목록</h2>
-                <input id="searchInput" type="search" placeholder="문항, 단원, 시험범위 검색">
+                <input id="searchInput" type="search" placeholder="문항, 뒷면, 태그 검색">
               </div>
               <div class="card-list" id="cardList"></div>
             </section>

@@ -1,12 +1,14 @@
 {
-  "title": "과학 샘플",
+  "title": "한국사 상기 샘플",
   "cards": [
     {
-      "id": "science-sample-1",
-      "prompt": "물은 표준 기압에서 섭씨 100도에 끓는다.",
-      "answer": "O",
-      "explanation": "표준 기압 1기압에서는 물의 끓는점이 섭씨 100도입니다.",
-      "tags": ["1단원", "기초"],
+      "id": "history-recall-1",
+      "type": "recall",
+      "prompt": "조선을 건국한 인물과 건국 연도는?",
+      "answer": "",
+      "back": "이성계가 1392년에 조선을 건국했습니다.",
+      "explanation": "시험에서는 '태조 이성계, 1392년'을 함께 떠올리면 좋습니다.",
+      "tags": ["조선", "기초", "암기필수"],
       "box": 1,
       "stats": {
         "attempts": 0,
@@ -16,11 +18,13 @@
       }
     },
     {
-      "id": "science-sample-2",
-      "prompt": "식물은 광합성을 할 때 이산화탄소를 사용한다.",
-      "answer": "O",
-      "explanation": "광합성 과정에서 식물은 이산화탄소와 물을 사용해 양분을 만듭니다.",
-      "tags": ["생명", "암기필수"],
+      "id": "history-recall-2",
+      "type": "recall",
+      "prompt": "훈민정음 창제와 관련해 반드시 기억할 왕은?",
+      "answer": "",
+      "back": "조선 세종입니다.",
+      "explanation": "훈민정음 반포는 1446년입니다.",
+      "tags": ["조선", "문화", "중간고사"],
       "box": 1,
       "stats": {
         "attempts": 0,
@@ -30,11 +34,13 @@
       }
     },
     {
-      "id": "science-sample-3",
-      "prompt": "전류의 단위는 볼트(V)이다.",
-      "answer": "X",
-      "explanation": "전류의 단위는 암페어(A)이고, 볼트(V)는 전압의 단위입니다.",
-      "tags": ["전기", "중간고사"],
+      "id": "history-recall-3",
+      "type": "recall",
+      "prompt": "삼국 통일을 주도한 국가는?",
+      "answer": "",
+      "back": "신라입니다.",
+      "explanation": "나당 연합과 이후 당 세력 축출 흐름까지 연결해 두면 좋습니다.",
+      "tags": ["삼국시대", "1단원"],
       "box": 1,
       "stats": {
         "attempts": 0,

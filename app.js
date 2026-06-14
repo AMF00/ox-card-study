@@ -3,99 +3,110 @@
 
   var STORAGE_KEY = "ox-card-study-state-v1";
   var TODAY_KEY = "ox-card-study-today-v1";
+  var CARD_RECALL = "recall";
+  var CARD_OX = "ox";
 
   var sampleDecks = [
     {
-      title: "과학 샘플",
+      title: "한국사 상기 샘플",
       cards: [
         {
-          id: "science-sample-1",
-          prompt: "물은 표준 기압에서 섭씨 100도에 끓는다.",
-          answer: "O",
-          explanation: "표준 기압 1기압에서는 물의 끓는점이 섭씨 100도입니다.",
-          tags: ["1단원", "기초"],
+          id: "history-recall-1",
+          type: CARD_RECALL,
+          prompt: "조선을 건국한 인물과 건국 연도는?",
+          back: "이성계가 1392년에 조선을 건국했습니다.",
+          explanation: "시험에서는 '태조 이성계, 1392년'을 함께 떠올리면 좋습니다.",
+          tags: ["조선", "기초", "암기필수"],
           box: 1,
           stats: { attempts: 0, correct: 0, wrong: 0, lastAnsweredAt: null }
         },
         {
-          id: "science-sample-2",
-          prompt: "식물은 광합성을 할 때 이산화탄소를 사용한다.",
-          answer: "O",
-          explanation: "광합성 과정에서 식물은 이산화탄소와 물을 사용해 양분을 만듭니다.",
-          tags: ["생명", "암기필수"],
+          id: "history-recall-2",
+          type: CARD_RECALL,
+          prompt: "훈민정음 창제와 관련해 반드시 기억할 왕은?",
+          back: "조선 세종입니다.",
+          explanation: "훈민정음 반포는 1446년입니다.",
+          tags: ["조선", "문화", "중간고사"],
           box: 1,
           stats: { attempts: 0, correct: 0, wrong: 0, lastAnsweredAt: null }
         },
         {
-          id: "science-sample-3",
-          prompt: "전류의 단위는 볼트(V)이다.",
-          answer: "X",
-          explanation: "전류의 단위는 암페어(A)이고, 볼트(V)는 전압의 단위입니다.",
-          tags: ["전기", "중간고사"],
+          id: "history-recall-3",
+          type: CARD_RECALL,
+          prompt: "삼국 통일을 주도한 국가는?",
+          back: "신라입니다.",
+          explanation: "나당 연합과 이후 당 세력 축출 흐름까지 연결해 두면 좋습니다.",
+          tags: ["삼국시대", "1단원"],
           box: 1,
           stats: { attempts: 0, correct: 0, wrong: 0, lastAnsweredAt: null }
         }
       ]
     },
     {
-      title: "한국사 샘플",
+      title: "영어 단어 샘플",
       cards: [
         {
-          id: "history-sample-1",
-          prompt: "대한민국의 수도는 서울이다.",
-          answer: "O",
-          explanation: "대한민국의 수도는 서울입니다.",
-          tags: ["기초", "상식"],
+          id: "english-recall-1",
+          type: CARD_RECALL,
+          prompt: "accurate",
+          back: "정확한",
+          explanation: "an accurate answer: 정확한 답",
+          tags: ["어휘", "기초"],
           box: 1,
           stats: { attempts: 0, correct: 0, wrong: 0, lastAnsweredAt: null }
         },
         {
-          id: "history-sample-2",
-          prompt: "조선의 수도는 한양이었다.",
-          answer: "O",
-          explanation: "조선은 한양을 수도로 삼았습니다.",
-          tags: ["조선", "1단원"],
+          id: "english-recall-2",
+          type: CARD_RECALL,
+          prompt: "compare A with B",
+          back: "A와 B를 비교하다",
+          explanation: "compare는 차이점과 공통점을 함께 살펴볼 때 씁니다.",
+          tags: ["숙어", "중간고사"],
           box: 1,
           stats: { attempts: 0, correct: 0, wrong: 0, lastAnsweredAt: null }
         },
         {
-          id: "history-sample-3",
-          prompt: "훈민정음은 고려 시대에 창제되었다.",
-          answer: "X",
-          explanation: "훈민정음은 조선 세종 때 창제되었습니다.",
-          tags: ["조선", "암기필수"],
+          id: "english-recall-3",
+          type: CARD_RECALL,
+          prompt: "because of + 명사",
+          back: "~ 때문에",
+          explanation: "because 뒤에는 절이 오고, because of 뒤에는 명사구가 옵니다.",
+          tags: ["문법", "암기필수"],
           box: 1,
           stats: { attempts: 0, correct: 0, wrong: 0, lastAnsweredAt: null }
         }
       ]
     },
     {
-      title: "영어 샘플",
+      title: "과학 개념 샘플",
       cards: [
         {
-          id: "english-sample-1",
-          prompt: "영어에서 'went'는 go의 과거형이다.",
-          answer: "O",
-          explanation: "go의 과거형은 went입니다.",
-          tags: ["문법", "동사"],
+          id: "science-recall-1",
+          type: CARD_RECALL,
+          prompt: "광합성에 필요한 재료와 만들어지는 물질은?",
+          back: "이산화탄소와 물을 사용해 포도당과 산소를 만듭니다.",
+          explanation: "빛에너지가 필요하며, 엽록체에서 일어납니다.",
+          tags: ["생명", "1단원"],
           box: 1,
           stats: { attempts: 0, correct: 0, wrong: 0, lastAnsweredAt: null }
         },
         {
-          id: "english-sample-2",
-          prompt: "'apple'은 셀 수 없는 명사이다.",
-          answer: "X",
-          explanation: "apple은 셀 수 있는 명사입니다.",
-          tags: ["명사", "기초"],
+          id: "science-recall-2",
+          type: CARD_RECALL,
+          prompt: "전류의 단위와 기호는?",
+          back: "암페어, A",
+          explanation: "전압의 단위는 볼트(V)입니다.",
+          tags: ["전기", "기초"],
           box: 1,
           stats: { attempts: 0, correct: 0, wrong: 0, lastAnsweredAt: null }
         },
         {
-          id: "english-sample-3",
-          prompt: "'because'는 이유를 나타낼 때 쓸 수 있다.",
-          answer: "O",
-          explanation: "because는 이유를 설명하는 접속사로 사용할 수 있습니다.",
-          tags: ["문법", "중간고사"],
+          id: "science-recall-3",
+          type: CARD_RECALL,
+          prompt: "물질의 상태 변화 중 액체가 기체로 변하는 현상은?",
+          back: "기화입니다.",
+          explanation: "끓음과 증발은 모두 기화에 포함됩니다.",
+          tags: ["화학", "기말고사"],
           box: 1,
           stats: { attempts: 0, correct: 0, wrong: 0, lastAnsweredAt: null }
         }
@@ -109,8 +120,10 @@
   var studyMode = "all";
   var studyQueue = [];
   var queueIndex = 0;
+  var selectedFormType = CARD_RECALL;
   var selectedFormAnswer = "O";
   var lastAnsweredCardId = null;
+  var isAnswerRevealed = false;
 
   var els = {};
 
@@ -130,14 +143,22 @@
     els.accuracyRate = document.getElementById("accuracyRate");
     els.wrongCount = document.getElementById("wrongCount");
     els.cardCount = document.getElementById("cardCount");
+    els.studyCard = document.getElementById("studyCard");
     els.studyPosition = document.getElementById("studyPosition");
+    els.studyType = document.getElementById("studyType");
     els.studyTags = document.getElementById("studyTags");
     els.studyPrompt = document.getElementById("studyPrompt");
+    els.answerButtons = document.getElementById("answerButtons");
+    els.recallActions = document.getElementById("recallActions");
+    els.revealButton = document.getElementById("revealButton");
     els.feedback = document.getElementById("feedback");
     els.cardForm = document.getElementById("cardForm");
     els.formTitle = document.getElementById("formTitle");
     els.editingCardId = document.getElementById("editingCardId");
     els.promptInput = document.getElementById("promptInput");
+    els.backInput = document.getElementById("backInput");
+    els.backField = document.getElementById("backField");
+    els.oxAnswerField = document.getElementById("oxAnswerField");
     els.explanationInput = document.getElementById("explanationInput");
     els.tagsInput = document.getElementById("tagsInput");
     els.cardList = document.getElementById("cardList");
@@ -153,6 +174,7 @@
       activeDeckId = els.deckSelect.value;
       state.activeDeckId = activeDeckId;
       resetStudyPosition();
+      resetForm();
       saveState();
       renderAll();
     });
@@ -162,7 +184,7 @@
     document.getElementById("deleteDeckButton").addEventListener("click", deleteDeck);
     document.getElementById("resetTodayButton").addEventListener("click", resetToday);
     document.getElementById("shuffleButton").addEventListener("click", shuffleStudy);
-    document.getElementById("revealButton").addEventListener("click", revealAnswer);
+    els.revealButton.addEventListener("click", revealAnswer);
     document.getElementById("nextButton").addEventListener("click", nextCard);
     document.getElementById("cancelEditButton").addEventListener("click", resetForm);
     document.getElementById("exportJsonButton").addEventListener("click", exportJson);
@@ -191,6 +213,19 @@
     document.querySelectorAll("[data-answer]").forEach(function (button) {
       button.addEventListener("click", function () {
         answerCurrentCard(button.dataset.answer);
+      });
+    });
+
+    document.querySelectorAll("[data-recall-grade]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        gradeRecallCard(button.dataset.recallGrade === "remembered");
+      });
+    });
+
+    document.querySelectorAll("[data-form-type]").forEach(function (button) {
+      button.addEventListener("click", function () {
+        selectedFormType = normalizeCardType(button.dataset.formType) || CARD_RECALL;
+        renderFormControls();
       });
     });
 
@@ -226,9 +261,18 @@
       });
       return { activeDeckId: defaultDecks[0].id, decks: defaultDecks };
     }
+
     loaded.decks = loaded.decks.map(function (deck) {
       return normalizeDeck(deck);
-    });
+    }).filter(Boolean);
+
+    if (loaded.decks.length === 0) {
+      var fallbackDecks = sampleDecks.map(function (deck) {
+        return normalizeDeck(deck, "sample");
+      });
+      return { activeDeckId: fallbackDecks[0].id, decks: fallbackDecks };
+    }
+
     return loaded;
   }
 
@@ -239,7 +283,12 @@
       todayState = { date: key, attempts: 0, correct: 0, wrong: 0 };
       localStorage.setItem(TODAY_KEY, JSON.stringify(todayState));
     }
-    return todayState;
+    return {
+      date: todayState.date,
+      attempts: clampNumber(todayState.attempts, 0, 999999, 0),
+      correct: clampNumber(todayState.correct, 0, 999999, 0),
+      wrong: clampNumber(todayState.wrong, 0, 999999, 0)
+    };
   }
 
   function readJson(key) {
@@ -275,32 +324,88 @@
   }
 
   function normalizeDeck(deck, prefix) {
-    var normalized = {
+    if (!deck || typeof deck !== "object") {
+      return null;
+    }
+    return {
       id: deck.id || createId(prefix || "deck"),
       title: String(deck.title || "새 과목").trim() || "새 과목",
       cards: Array.isArray(deck.cards) ? deck.cards.map(normalizeCard).filter(Boolean) : []
     };
-    return normalized;
   }
 
   function normalizeCard(card) {
     if (!card || typeof card !== "object") {
       return null;
     }
-    var prompt = String(card.prompt || "").trim();
-    var answer = normalizeAnswer(card.answer);
-    if (!prompt || !answer) {
+
+    var prompt = String(card.prompt || card.front || card.question || "").trim();
+    var normalizedAnswer = normalizeAnswer(card.answer);
+    var explicitType = normalizeCardType(card.type || card.cardType || card.kind);
+    var rawBack = firstText(card.back, card.backText, card.answerText);
+    var inferredType = rawBack && !normalizedAnswer ? CARD_RECALL : CARD_OX;
+    var type = explicitType || inferredType;
+
+    if (!prompt) {
+      return null;
+    }
+
+    if (type === CARD_RECALL) {
+      var back = rawBack || (!normalizedAnswer ? String(card.answer || "").trim() : "");
+      if (!back) {
+        return null;
+      }
+      return {
+        id: card.id || createId("card"),
+        type: CARD_RECALL,
+        prompt: prompt,
+        answer: "",
+        back: back,
+        explanation: String(card.explanation || card.note || "").trim(),
+        tags: normalizeTags(card.tags),
+        box: clampNumber(card.box, 1, 5, 1),
+        stats: normalizeStats(card.stats)
+      };
+    }
+
+    if (!normalizedAnswer) {
       return null;
     }
     return {
       id: card.id || createId("card"),
+      type: CARD_OX,
       prompt: prompt,
-      answer: answer,
-      explanation: String(card.explanation || "").trim(),
+      answer: normalizedAnswer,
+      back: rawBack || "",
+      explanation: String(card.explanation || card.note || "").trim(),
       tags: normalizeTags(card.tags),
       box: clampNumber(card.box, 1, 5, 1),
       stats: normalizeStats(card.stats)
     };
+  }
+
+  function normalizeCardType(value) {
+    var normalized = String(value || "").trim().toLowerCase();
+    if (!normalized) {
+      return "";
+    }
+    if (["recall", "flashcard", "front-back", "frontback", "back", "상기", "상기 카드", "암기", "앞뒤", "앞면뒷면"].indexOf(normalized) >= 0) {
+      return CARD_RECALL;
+    }
+    if (["ox", "o/x", "truefalse", "true-false", "tf", "o x", "ox 카드", "오엑스"].indexOf(normalized) >= 0) {
+      return CARD_OX;
+    }
+    return "";
+  }
+
+  function firstText() {
+    for (var index = 0; index < arguments.length; index += 1) {
+      var value = String(arguments[index] || "").trim();
+      if (value) {
+        return value;
+      }
+    }
+    return "";
   }
 
   function normalizeStats(stats) {
@@ -363,7 +468,7 @@
     renderStudy();
     renderCardList();
     renderPrintView();
-    renderFormAnswer();
+    renderFormControls();
   }
 
   function renderDeckSelect() {
@@ -446,19 +551,45 @@
     var card = getCurrentStudyCard();
     els.feedback.className = "feedback";
     lastAnsweredCardId = null;
+    isAnswerRevealed = false;
+    setRecallActionsVisible(false);
 
     if (!card) {
       els.studyPosition.textContent = "0 / 0";
+      els.studyType.textContent = "";
       els.studyTags.textContent = "";
       els.studyPrompt.textContent = "이 범위에 학습할 카드가 없습니다.";
+      els.answerButtons.hidden = true;
+      els.revealButton.disabled = true;
+      els.revealButton.textContent = "뒷면 보기";
       els.feedback.textContent = "카드를 추가하거나 다른 학습 범위를 선택하세요.";
       return;
     }
 
+    var isOx = card.type === CARD_OX;
     els.studyPosition.textContent = (queueIndex + 1) + " / " + studyQueue.length;
+    els.studyType.textContent = getCardTypeLabel(card);
     els.studyTags.textContent = card.tags.length ? card.tags.join(", ") : "태그 없음";
     els.studyPrompt.textContent = card.prompt;
-    els.feedback.textContent = "정답을 선택하세요.";
+    els.answerButtons.hidden = !isOx;
+    els.revealButton.disabled = false;
+    els.revealButton.textContent = isOx ? "정답 보기" : "뒷면 보기";
+    els.feedback.textContent = isOx ? "O 또는 X를 선택하세요." : "뒷면을 떠올린 뒤 확인하세요.";
+  }
+
+  function getCardTypeLabel(card) {
+    return card.type === CARD_OX ? "OX 카드" : "상기 카드";
+  }
+
+  function setRecallActionsVisible(visible) {
+    els.recallActions.hidden = !visible;
+    setRecallActionDisabled(false);
+  }
+
+  function setRecallActionDisabled(disabled) {
+    document.querySelectorAll("[data-recall-grade]").forEach(function (button) {
+      button.disabled = disabled;
+    });
   }
 
   function getCurrentStudyCard() {
@@ -476,14 +607,34 @@
 
   function answerCurrentCard(answer) {
     var card = getCurrentStudyCard();
-    if (!card || lastAnsweredCardId === card.id) {
+    if (!card || card.type !== CARD_OX || lastAnsweredCardId === card.id) {
       return;
     }
 
     var correct = answer === card.answer;
+    recordStudyResult(card, correct);
+    showOxFeedback(card, answer, correct);
+  }
+
+  function gradeRecallCard(remembered) {
+    var card = getCurrentStudyCard();
+    if (!card || card.type !== CARD_RECALL || lastAnsweredCardId === card.id) {
+      return;
+    }
+    if (!isAnswerRevealed) {
+      revealAnswer();
+    }
+
+    recordStudyResult(card, remembered);
+    els.feedback.className = "feedback " + (remembered ? "correct" : "wrong");
+    els.feedback.textContent = (remembered ? "기억함으로 기록했습니다." : "복습 필요로 기록했습니다.") + "\n\n" + formatRecallBack(card);
+    setRecallActionDisabled(true);
+  }
+
+  function recordStudyResult(card, success) {
     card.stats.attempts += 1;
     card.stats.lastAnsweredAt = new Date().toISOString();
-    if (correct) {
+    if (success) {
       card.stats.correct += 1;
       card.box = Math.min(5, card.box + 1);
       today.correct += 1;
@@ -497,10 +648,9 @@
     saveState();
     saveToday();
     renderStats();
-    showFeedback(card, answer, correct);
   }
 
-  function showFeedback(card, answer, correct) {
+  function showOxFeedback(card, answer, correct) {
     els.feedback.className = "feedback " + (correct ? "correct" : "wrong");
     var result = correct ? "정답입니다." : "오답입니다.";
     var answerText = "선택: " + answer + " / 정답: " + card.answer;
@@ -513,8 +663,25 @@
     if (!card) {
       return;
     }
+
     els.feedback.className = "feedback";
+    if (card.type === CARD_RECALL) {
+      isAnswerRevealed = true;
+      els.feedback.textContent = formatRecallBack(card);
+      setRecallActionsVisible(true);
+      els.revealButton.disabled = true;
+      return;
+    }
+
     els.feedback.textContent = "정답: " + card.answer + (card.explanation ? "\n\n" + card.explanation : "");
+  }
+
+  function formatRecallBack(card) {
+    var text = "뒷면\n" + card.back;
+    if (card.explanation) {
+      text += "\n\n메모\n" + card.explanation;
+    }
+    return text;
   }
 
   function nextCard() {
@@ -534,6 +701,7 @@
   function resetStudyPosition() {
     queueIndex = 0;
     lastAnsweredCardId = null;
+    isAnswerRevealed = false;
     rebuildStudyQueue();
   }
 
@@ -605,26 +773,44 @@
     event.preventDefault();
     var deck = getActiveDeck();
     var promptText = els.promptInput.value.trim();
+    var backText = els.backInput.value.trim();
     if (!promptText) {
       els.promptInput.focus();
+      return;
+    }
+    if (selectedFormType === CARD_RECALL && !backText) {
+      els.backInput.focus();
       return;
     }
 
     var existing = els.editingCardId.value ? findCard(els.editingCardId.value) : null;
     var cardData = {
+      id: existing ? existing.id : undefined,
+      type: selectedFormType,
       prompt: promptText,
-      answer: selectedFormAnswer,
+      answer: selectedFormType === CARD_OX ? selectedFormAnswer : "",
+      back: selectedFormType === CARD_RECALL ? backText : "",
       explanation: els.explanationInput.value.trim(),
-      tags: normalizeTags(els.tagsInput.value)
+      tags: normalizeTags(els.tagsInput.value),
+      box: existing ? existing.box : 1,
+      stats: existing ? existing.stats : undefined
     };
+    var normalized = normalizeCard(cardData);
+    if (!normalized) {
+      return;
+    }
 
     if (existing) {
-      existing.prompt = cardData.prompt;
-      existing.answer = cardData.answer;
-      existing.explanation = cardData.explanation;
-      existing.tags = cardData.tags;
+      existing.type = normalized.type;
+      existing.prompt = normalized.prompt;
+      existing.answer = normalized.answer;
+      existing.back = normalized.back;
+      existing.explanation = normalized.explanation;
+      existing.tags = normalized.tags;
+      existing.box = normalized.box;
+      existing.stats = normalized.stats;
     } else {
-      deck.cards.unshift(normalizeCard(cardData));
+      deck.cards.unshift(normalized);
     }
 
     saveState();
@@ -637,9 +823,23 @@
     els.formTitle.textContent = "카드 추가";
     els.editingCardId.value = "";
     els.promptInput.value = "";
+    els.backInput.value = "";
     els.explanationInput.value = "";
     els.tagsInput.value = "";
+    selectedFormType = CARD_RECALL;
     selectedFormAnswer = "O";
+    renderFormControls();
+  }
+
+  function renderFormControls() {
+    document.querySelectorAll("[data-form-type]").forEach(function (button) {
+      button.classList.toggle("active", normalizeCardType(button.dataset.formType) === selectedFormType);
+    });
+    els.backField.hidden = selectedFormType !== CARD_RECALL;
+    els.oxAnswerField.hidden = selectedFormType !== CARD_OX;
+    els.backInput.required = selectedFormType === CARD_RECALL;
+    els.promptInput.placeholder = selectedFormType === CARD_RECALL ? "앞면에 보여 줄 내용을 적으세요." : "O 또는 X로 판단할 문장을 적으세요.";
+    els.explanationInput.placeholder = selectedFormType === CARD_RECALL ? "암기 팁, 예외, 관련 개념을 적어 두세요." : "왜 맞거나 틀렸는지 적어 두세요.";
     renderFormAnswer();
   }
 
@@ -658,6 +858,8 @@
       }
       return (
         card.prompt.toLowerCase().indexOf(keyword) >= 0 ||
+        card.back.toLowerCase().indexOf(keyword) >= 0 ||
+        card.answer.toLowerCase().indexOf(keyword) >= 0 ||
         card.explanation.toLowerCase().indexOf(keyword) >= 0 ||
         card.tags.join(" ").toLowerCase().indexOf(keyword) >= 0
       );
@@ -685,17 +887,27 @@
     title.textContent = card.prompt;
     header.appendChild(title);
 
-    var answer = document.createElement("span");
-    answer.className = "badge " + (card.answer === "X" ? "answer-x" : "");
-    answer.textContent = card.answer;
-    header.appendChild(answer);
+    var headerBadges = document.createElement("div");
+    headerBadges.className = "badge-row compact";
+    var typeBadge = document.createElement("span");
+    typeBadge.className = "badge";
+    typeBadge.textContent = getCardTypeLabel(card);
+    headerBadges.appendChild(typeBadge);
+    if (card.type === CARD_OX) {
+      var answer = document.createElement("span");
+      answer.className = "badge " + (card.answer === "X" ? "answer-x" : "answer-o");
+      answer.textContent = card.answer;
+      headerBadges.appendChild(answer);
+    }
+    header.appendChild(headerBadges);
     item.appendChild(header);
 
-    if (card.explanation) {
-      var explanation = document.createElement("p");
-      explanation.className = "muted";
-      explanation.textContent = card.explanation;
-      item.appendChild(explanation);
+    var previewText = getCardPreview(card);
+    if (previewText) {
+      var preview = document.createElement("p");
+      preview.className = "muted";
+      preview.textContent = previewText;
+      item.appendChild(preview);
     }
 
     var badges = document.createElement("div");
@@ -712,7 +924,7 @@
     badges.appendChild(box);
     var stats = document.createElement("span");
     stats.className = "badge";
-    stats.textContent = "정답 " + card.stats.correct + " / 오답 " + card.stats.wrong;
+    stats.textContent = "성공 " + card.stats.correct + " / 복습 " + card.stats.wrong;
     badges.appendChild(stats);
     item.appendChild(badges);
 
@@ -739,6 +951,13 @@
     return item;
   }
 
+  function getCardPreview(card) {
+    if (card.type === CARD_RECALL) {
+      return "뒷면: " + card.back;
+    }
+    return card.explanation ? "해설: " + card.explanation : "";
+  }
+
   function editCard(cardId) {
     var card = findCard(cardId);
     if (!card) {
@@ -748,10 +967,12 @@
     els.formTitle.textContent = "카드 수정";
     els.editingCardId.value = card.id;
     els.promptInput.value = card.prompt;
+    els.backInput.value = card.back;
     els.explanationInput.value = card.explanation;
     els.tagsInput.value = card.tags.join(", ");
-    selectedFormAnswer = card.answer;
-    renderFormAnswer();
+    selectedFormType = card.type;
+    selectedFormAnswer = card.answer || "O";
+    renderFormControls();
     els.promptInput.focus();
   }
 
@@ -775,14 +996,14 @@
   }
 
   function exportCsv() {
-    var rows = [["prompt", "answer", "explanation", "tags"]];
+    var rows = [["type", "prompt", "answer", "back", "explanation", "tags"]];
     getActiveDeck().cards.forEach(function (card) {
-      rows.push([card.prompt, card.answer, card.explanation, card.tags.join(";")]);
+      rows.push([card.type, card.prompt, card.answer, card.back, card.explanation, card.tags.join(";")]);
     });
     var csv = rows.map(function (row) {
       return row.map(escapeCsvCell).join(",");
     }).join("\r\n");
-    downloadFile(slugify(getActiveDeck().title) + ".csv", csv, "text/csv;charset=utf-8");
+    downloadFile(slugify(getActiveDeck().title) + ".csv", "\ufeff" + csv, "text/csv;charset=utf-8");
   }
 
   function escapeCsvCell(value) {
@@ -806,7 +1027,7 @@
   }
 
   function slugify(value) {
-    var fallback = "ox-subject-deck";
+    var fallback = "study-card-deck";
     var slug = String(value || fallback).trim().replace(/[\\/:*?"<>|]+/g, "-").replace(/\s+/g, "-");
     return slug || fallback;
   }
@@ -840,7 +1061,7 @@
     if (lower.endsWith(".json")) {
       var json = JSON.parse(text);
       var deck = normalizeDeck(json);
-      if (deck.cards.length === 0) {
+      if (!deck || deck.cards.length === 0) {
         throw new Error("JSON에 유효한 카드가 없습니다.");
       }
       deck.id = createId("deck");
@@ -861,27 +1082,40 @@
       throw new Error("CSV에는 헤더와 최소 1개의 카드가 필요합니다.");
     }
     var headers = rows[0].map(function (item) {
-      return item.trim().toLowerCase();
+      return item.replace(/^\ufeff/, "").trim().toLowerCase();
     });
-    var promptIndex = headers.indexOf("prompt");
-    var answerIndex = headers.indexOf("answer");
-    var explanationIndex = headers.indexOf("explanation");
-    var tagsIndex = headers.indexOf("tags");
-    if (promptIndex < 0 || answerIndex < 0) {
-      throw new Error("CSV 헤더에는 prompt, answer가 필요합니다.");
+    var typeIndex = getHeaderIndex(headers, ["type", "kind", "cardtype", "카드종류"]);
+    var promptIndex = getHeaderIndex(headers, ["prompt", "front", "question", "앞면", "질문"]);
+    var answerIndex = getHeaderIndex(headers, ["answer", "정답"]);
+    var backIndex = getHeaderIndex(headers, ["back", "backtext", "answertext", "뒷면", "답"]);
+    var explanationIndex = getHeaderIndex(headers, ["explanation", "note", "memo", "해설", "메모"]);
+    var tagsIndex = getHeaderIndex(headers, ["tags", "tag", "태그"]);
+
+    if (promptIndex < 0) {
+      throw new Error("CSV 헤더에는 prompt 또는 front가 필요합니다.");
+    }
+    if (answerIndex < 0 && backIndex < 0) {
+      throw new Error("CSV 헤더에는 answer 또는 back이 필요합니다.");
     }
 
     var cards = rows.slice(1).map(function (row) {
+      var answerValue = answerIndex >= 0 ? row[answerIndex] : "";
+      var backValue = backIndex >= 0 ? row[backIndex] : "";
+      var explicitType = typeIndex >= 0 ? row[typeIndex] : "";
+      var normalizedAnswer = normalizeAnswer(answerValue);
+      var type = normalizeCardType(explicitType) || (backValue || !normalizedAnswer ? CARD_RECALL : CARD_OX);
       return normalizeCard({
+        type: type,
         prompt: row[promptIndex],
-        answer: row[answerIndex],
+        answer: answerValue,
+        back: backValue,
         explanation: explanationIndex >= 0 ? row[explanationIndex] : "",
         tags: tagsIndex >= 0 ? row[tagsIndex] : ""
       });
     }).filter(Boolean);
 
     if (cards.length === 0) {
-      throw new Error("CSV에 유효한 카드가 없습니다. answer 값은 O/X 또는 true/false 계열이어야 합니다.");
+      throw new Error("CSV에 유효한 카드가 없습니다. 상기 카드는 prompt/back, OX 카드는 prompt/answer가 필요합니다.");
     }
 
     return {
@@ -889,6 +1123,16 @@
       title: uniqueDeckTitle(filename.replace(/\.csv$/i, "")),
       cards: cards
     };
+  }
+
+  function getHeaderIndex(headers, names) {
+    for (var index = 0; index < names.length; index += 1) {
+      var headerIndex = headers.indexOf(names[index]);
+      if (headerIndex >= 0) {
+        return headerIndex;
+      }
+    }
+    return -1;
   }
 
   function parseCsv(text) {
@@ -985,17 +1229,35 @@
     deck.cards.forEach(function (card) {
       var item = document.createElement("article");
       item.className = "print-card";
-      var answer = document.createElement("span");
-      answer.className = "print-answer " + (card.answer === "X" ? "x" : "");
-      answer.textContent = card.answer;
+
+      if (card.type === CARD_OX) {
+        var answer = document.createElement("span");
+        answer.className = "print-answer " + (card.answer === "X" ? "x" : "");
+        answer.textContent = card.answer;
+        item.appendChild(answer);
+      } else {
+        var type = document.createElement("span");
+        type.className = "print-type";
+        type.textContent = "상기";
+        item.appendChild(type);
+      }
+
       var prompt = document.createElement("strong");
       prompt.textContent = card.prompt;
-      var explanation = document.createElement("span");
-      explanation.className = "muted";
-      explanation.textContent = card.explanation || "해설 없음";
-      item.appendChild(answer);
       item.appendChild(prompt);
-      item.appendChild(explanation);
+
+      var detail = document.createElement("span");
+      detail.className = "muted";
+      detail.textContent = card.type === CARD_RECALL ? card.back : (card.explanation || "해설 없음");
+      item.appendChild(detail);
+
+      if (card.type === CARD_RECALL && card.explanation) {
+        var note = document.createElement("span");
+        note.className = "muted small";
+        note.textContent = card.explanation;
+        item.appendChild(note);
+      }
+
       els.printGrid.appendChild(item);
     });
   }
