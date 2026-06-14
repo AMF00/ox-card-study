@@ -159,6 +159,17 @@ function Get-PagesInfo($Owner, $Repo) {
   }
 }
 
+function Test-GhRepositoryExists($Owner, $Repo) {
+  $previousErrorActionPreference = $ErrorActionPreference
+  $ErrorActionPreference = "Continue"
+  try {
+    gh repo view "$Owner/$Repo" *> $null
+    return $LASTEXITCODE -eq 0
+  } finally {
+    $ErrorActionPreference = $previousErrorActionPreference
+  }
+}
+
 function Wait-ForPages($Owner, $Repo, $TimeoutSeconds) {
   $deadline = (Get-Date).AddSeconds($TimeoutSeconds)
   do {
@@ -222,8 +233,7 @@ if ($AuthMode -eq "gh") {
       Fail "Could not determine GitHub account from gh."
     }
 
-    gh repo view "$account/$RepoName" *> $null
-    if ($LASTEXITCODE -eq 0) {
+    if (Test-GhRepositoryExists -Owner $account -Repo $RepoName) {
       Write-Host "Repository already exists: $account/$RepoName"
       Invoke-Git remote add origin "https://github.com/$account/$RepoName.git"
     } else {
