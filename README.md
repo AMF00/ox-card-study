@@ -4,6 +4,8 @@
 
 ## 휴대폰에서 쓰는 방법
 
+### 장기 링크: GitHub Pages
+
 1. GitHub CLI를 설치하고 `gh auth login`으로 로그인합니다. 또는 `GITHUB_TOKEN` 환경변수를 설정합니다.
 2. 이 폴더에서 `.\publish-github-pages.ps1`을 실행합니다.
 3. 스크립트가 저장소 생성, 푸시, GitHub Pages 활성화를 시도합니다.
@@ -17,6 +19,20 @@
 ```
 
 `GITHUB_TOKEN` 방식은 저장소 생성과 Pages 설정을 위해 GitHub API 권한이 필요합니다. classic token은 `repo` 범위가 필요하고, fine-grained token은 저장소 생성 권한과 Pages/Administration 쓰기 권한이 필요합니다.
+
+### 임시 링크: PC 터널
+
+GitHub 인증 없이 지금 휴대폰에서 열어야 한다면 아래 명령으로 임시 HTTPS 링크를 만들 수 있습니다.
+
+```powershell
+.\start-phone-link.ps1
+```
+
+생성된 주소는 `PHONE_LINK.txt`에도 저장됩니다. 이 링크는 PC, 정적 서버, SSH 터널이 켜져 있는 동안만 작동합니다. 끝낼 때는 아래 명령을 사용합니다.
+
+```powershell
+.\stop-phone-link.ps1
+```
 
 ## 데이터 이동
 

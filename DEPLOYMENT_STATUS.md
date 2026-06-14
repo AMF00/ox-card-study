@@ -7,8 +7,9 @@
 - Local commits exist for the app and deployment preparation; use `git log -1 --oneline` for the current latest commit.
 - GitHub Pages workflow exists at `.github/workflows/pages.yml`.
 - `publish-github-pages.ps1` can publish with either an authenticated GitHub CLI session or a `GITHUB_TOKEN`.
+- `start-phone-link.ps1` can create a temporary phone link through a local static server and localhost.run SSH tunnel.
 - Mobile install metadata exists in `manifest.webmanifest` and `favicon.svg`.
-- Working tree was clean before this status/script update.
+- Runtime tunnel files are intentionally ignored by Git.
 
 ## Verified locally
 
@@ -17,6 +18,9 @@
 - `sample-deck.json` parsed as JSON.
 - HTML references `manifest.webmanifest` and `favicon.svg`.
 - GitHub Pages workflow uploads the repository root and deploys with GitHub Pages actions.
+- Temporary phone tunnel was created and verified through `localhost.run` / `lhr.life`.
+- Public tunnel returned the app HTML, CSS, JS, manifest, and icon assets.
+- Browser verification confirmed the public URL renders the subject selector and sample decks.
 
 ## External deployment blocker
 
@@ -36,3 +40,13 @@ After GitHub CLI is installed and authenticated, or after `GITHUB_TOKEN` is set,
 ```
 
 The script creates a public repository named `ox-card-study` by default, pushes `main`, and lets the included GitHub Pages workflow deploy the app.
+
+For a temporary phone link without GitHub authentication, run:
+
+```powershell
+.\start-phone-link.ps1
+```
+
+This uses the installed OpenSSH client and localhost.run. It is not a permanent deployment; the URL only works while the PC and tunnel process stay running.
+
+If a link is currently running, its URL and process IDs are stored in `PHONE_LINK.txt`.
