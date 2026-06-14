@@ -1,0 +1,19 @@
+{
+  "name": "OX 카드 학습",
+  "short_name": "OX 카드",
+  "description": "과목별 OX 카드덱을 만들고 반복 학습하는 로컬 저장형 학습 앱",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f3ed",
+  "theme_color": "#186a5e",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

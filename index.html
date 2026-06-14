@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="과목별 OX 카드덱을 만들고 반복 학습하는 로컬 저장형 학습 앱">
+    <meta name="theme-color" content="#186a5e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="OX 카드">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>OX 카드 학습</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">Local OX Study Cards</p>
+        <h1>OX 카드 학습</h1>
+      </div>
+      <div class="header-actions">
+        <button class="icon-button" id="printButton" type="button" title="인쇄">⎙</button>
+        <button class="button secondary" id="resetTodayButton" type="button">오늘 기록 초기화</button>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="sidebar" aria-label="과목과 통계">
+        <section class="panel deck-panel">
+          <label for="deckSelect">과목 / 카드덱</label>
+          <select id="deckSelect"></select>
+          <div class="button-row">
+            <button class="button" id="newDeckButton" type="button">과목 추가</button>
+            <button class="button secondary" id="renameDeckButton" type="button">이름 변경</button>
+            <button class="button danger" id="deleteDeckButton" type="button">삭제</button>
+          </div>
+        </section>
+
+        <section class="stats-grid" aria-label="학습 통계">
+          <div class="stat">
+            <span>오늘</span>
+            <strong id="todayCount">0</strong>
+          </div>
+          <div class="stat">
+            <span>정답률</span>
+            <strong id="accuracyRate">0%</strong>
+          </div>
+          <div class="stat">
+            <span>오답</span>
+            <strong id="wrongCount">0</strong>
+          </div>
+          <div class="stat">
+            <span>카드</span>
+            <strong id="cardCount">0</strong>
+          </div>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <nav class="tabs" aria-label="주요 화면">
+          <button class="tab active" data-view="studyView" type="button">학습</button>
+          <button class="tab" data-view="manageView" type="button">카드 관리</button>
+          <button class="tab" data-view="dataView" type="button">가져오기/내보내기</button>
+          <button class="tab" data-view="printView" type="button">인쇄 보기</button>
+        </nav>
+
+        <section class="view active" id="studyView">
+          <div class="study-toolbar">
+            <div class="segmented" role="group" aria-label="학습 범위">
+              <button class="segment active" data-study-mode="all" type="button">전체</button>
+              <button class="segment" data-study-mode="wrong" type="button">오답</button>
+              <button class="segment" data-study-mode="weak" type="button">미숙</button>
+            </div>
+            <button class="button secondary" id="shuffleButton" type="button">섞기</button>
+          </div>
+
+          <article class="study-card" id="studyCard">
+            <div class="card-meta">
+              <span id="studyPosition">0 / 0</span>
+              <span id="studyTags"></span>
+            </div>
+            <p class="prompt" id="studyPrompt">과목을 추가하거나 샘플 과목을 사용해 학습을 시작하세요.</p>
+            <div class="answer-buttons">
+              <button class="answer-button o" data-answer="O" type="button">O</button>
+              <button class="answer-button x" data-answer="X" type="button">X</button>
+            </div>
+            <div class="feedback" id="feedback" aria-live="polite"></div>
+            <div class="button-row">
+              <button class="button secondary" id="revealButton" type="button">정답 보기</button>
+              <button class="button" id="nextButton" type="button">다음 카드</button>
+            </div>
+          </article>
+        </section>
+
+        <section class="view" id="manageView">
+          <div class="manage-layout">
+            <form class="panel card-form" id="cardForm">
+              <h2 id="formTitle">카드 추가</h2>
+              <input id="editingCardId" type="hidden">
+
+              <label for="promptInput">질문</label>
+              <textarea id="promptInput" rows="5" required placeholder="예: 조선의 수도는 한양이었다."></textarea>
+
+              <label>정답</label>
+              <div class="segmented answer-choice" role="group" aria-label="정답 선택">
+                <button class="segment active" data-form-answer="O" type="button">O</button>
+                <button class="segment" data-form-answer="X" type="button">X</button>
+              </div>
+
+              <label for="explanationInput">해설</label>
+              <textarea id="explanationInput" rows="4" placeholder="왜 맞거나 틀렸는지 적어 두세요."></textarea>
+
+              <label for="tagsInput">태그(단원/시험범위)</label>
+              <input id="tagsInput" type="text" placeholder="1단원, 중간고사, 문법, 암기필수">
+
+              <div class="button-row">
+                <button class="button" type="submit">저장</button>
+                <button class="button secondary" id="cancelEditButton" type="button">초기화</button>
+              </div>
+            </form>
+
+            <section class="panel card-list-panel">
+              <div class="list-header">
+                <h2>카드 목록</h2>
+                <input id="searchInput" type="search" placeholder="문항, 단원, 시험범위 검색">
+              </div>
+              <div class="card-list" id="cardList"></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="dataView">
+          <div class="data-grid">
+            <section class="panel">
+              <h2>내보내기</h2>
+              <p class="muted">현재 과목 카드덱을 JSON 백업 또는 CSV 파일로 저장합니다.</p>
+              <div class="button-row">
+                <button class="button" id="exportJsonButton" type="button">JSON 내보내기</button>
+                <button class="button secondary" id="exportCsvButton" type="button">CSV 내보내기</button>
+              </div>
+            </section>
+
+            <section class="panel">
+              <h2>가져오기</h2>
+              <p class="muted">JSON 카드덱 또는 CSV 파일을 읽어 새 과목으로 추가합니다.</p>
+              <input id="fileInput" type="file" accept=".json,.csv,text/csv,application/json">
+              <div class="button-row">
+                <button class="button secondary" id="sampleButton" type="button">샘플 과목 다시 추가</button>
+              </div>
+              <p class="status" id="importStatus" aria-live="polite"></p>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="printView">
+          <div class="print-toolbar">
+            <h2>인쇄용 카드</h2>
+            <button class="button" id="printButtonInline" type="button">인쇄</button>
+          </div>
+          <div class="print-grid" id="printGrid"></div>
+        </section>
+      </section>
+    </main>
+
+    <template id="emptyStateTemplate">
+      <div class="empty-state">
+        <strong>표시할 카드가 없습니다.</strong>
+        <span>카드를 추가하거나 가져오기 화면에서 샘플 과목을 다시 추가하세요.</span>
+      </div>
+    </template>
+
+    <script src="app.js"></script>
+  </body>
+</html>

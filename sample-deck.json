@@ -1,0 +1,47 @@
+{
+  "title": "과학 샘플",
+  "cards": [
+    {
+      "id": "science-sample-1",
+      "prompt": "물은 표준 기압에서 섭씨 100도에 끓는다.",
+      "answer": "O",
+      "explanation": "표준 기압 1기압에서는 물의 끓는점이 섭씨 100도입니다.",
+      "tags": ["1단원", "기초"],
+      "box": 1,
+      "stats": {
+        "attempts": 0,
+        "correct": 0,
+        "wrong": 0,
+        "lastAnsweredAt": null
+      }
+    },
+    {
+      "id": "science-sample-2",
+      "prompt": "식물은 광합성을 할 때 이산화탄소를 사용한다.",
+      "answer": "O",
+      "explanation": "광합성 과정에서 식물은 이산화탄소와 물을 사용해 양분을 만듭니다.",
+      "tags": ["생명", "암기필수"],
+      "box": 1,
+      "stats": {
+        "attempts": 0,
+        "correct": 0,
+        "wrong": 0,
+        "lastAnsweredAt": null
+      }
+    },
+    {
+      "id": "science-sample-3",
+      "prompt": "전류의 단위는 볼트(V)이다.",
+      "answer": "X",
+      "explanation": "전류의 단위는 암페어(A)이고, 볼트(V)는 전압의 단위입니다.",
+      "tags": ["전기", "중간고사"],
+      "box": 1,
+      "stats": {
+        "attempts": 0,
+        "correct": 0,
+        "wrong": 0,
+        "lastAnsweredAt": null
+      }
+    }
+  ]
+}

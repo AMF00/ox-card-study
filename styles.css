@@ -1,0 +1,570 @@
+:root {
+  --bg: #f6f3ed;
+  --surface: #ffffff;
+  --surface-strong: #fffaf1;
+  --ink: #202124;
+  --muted: #667085;
+  --line: #d9d3c7;
+  --primary: #186a5e;
+  --primary-dark: #0e4f46;
+  --accent: #d95f43;
+  --accent-dark: #ad422b;
+  --danger: #b42318;
+  --shadow: 0 16px 40px rgba(32, 33, 36, 0.08);
+  --radius: 8px;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Arial, "Malgun Gothic", sans-serif;
+  line-height: 1.5;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 32px 16px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+h1,
+h2 {
+  margin: 0;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 32px;
+}
+
+h2 {
+  font-size: 18px;
+}
+
+.header-actions,
+.button-row,
+.study-toolbar,
+.print-toolbar,
+.list-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 16px;
+  padding: 0 32px 32px;
+}
+
+.sidebar,
+.workspace {
+  min-width: 0;
+}
+
+.panel,
+.study-card,
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.panel {
+  padding: 16px;
+}
+
+.deck-panel {
+  display: grid;
+  gap: 10px;
+}
+
+label {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+select,
+input,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  padding: 10px 12px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.button,
+.icon-button,
+.tab,
+.segment {
+  border: 1px solid transparent;
+  border-radius: 6px;
+  min-height: 40px;
+  color: #fff;
+  background: var(--primary);
+  font-weight: 700;
+}
+
+.button {
+  padding: 8px 12px;
+}
+
+.button:hover,
+.icon-button:hover,
+.tab.active,
+.segment.active {
+  background: var(--primary-dark);
+}
+
+.button.secondary {
+  background: #f8f8f6;
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.button.secondary:hover {
+  background: #ece7dc;
+}
+
+.button.danger {
+  background: var(--danger);
+}
+
+.icon-button {
+  width: 42px;
+  padding: 0;
+  font-size: 20px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.stat {
+  padding: 14px;
+}
+
+.stat span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.stat strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 24px;
+}
+
+.workspace {
+  display: grid;
+  gap: 12px;
+}
+
+.tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.tab {
+  flex: 0 0 auto;
+  background: #f8f8f6;
+  border-color: var(--line);
+  color: var(--ink);
+  padding: 8px 14px;
+}
+
+.view {
+  display: none;
+}
+
+.view.active {
+  display: block;
+}
+
+.study-toolbar {
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.segmented {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.segment {
+  min-width: 64px;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  padding: 8px 12px;
+}
+
+.study-card {
+  min-height: 420px;
+  padding: 24px;
+  display: grid;
+  align-content: center;
+  gap: 20px;
+}
+
+.card-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.prompt {
+  min-height: 132px;
+  margin: 0;
+  display: grid;
+  align-items: center;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.answer-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.answer-button {
+  min-height: 96px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 44px;
+  font-weight: 900;
+}
+
+.answer-button.o {
+  background: var(--primary);
+}
+
+.answer-button.x {
+  background: var(--accent);
+}
+
+.answer-button.o:hover {
+  background: var(--primary-dark);
+}
+
+.answer-button.x:hover {
+  background: var(--accent-dark);
+}
+
+.feedback {
+  min-height: 76px;
+  border-radius: 8px;
+  background: var(--surface-strong);
+  border: 1px dashed var(--line);
+  padding: 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.feedback.correct {
+  border-color: var(--primary);
+}
+
+.feedback.wrong {
+  border-color: var(--accent);
+}
+
+.manage-layout {
+  display: grid;
+  grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.card-form {
+  display: grid;
+  gap: 10px;
+  align-self: start;
+}
+
+.answer-choice {
+  width: fit-content;
+}
+
+.card-list-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.list-header {
+  justify-content: space-between;
+}
+
+.list-header input {
+  max-width: 320px;
+}
+
+.card-list {
+  display: grid;
+  gap: 10px;
+}
+
+.card-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fff;
+  display: grid;
+  gap: 10px;
+}
+
+.card-item-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.card-item strong {
+  overflow-wrap: anywhere;
+}
+
+.badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eef6f4;
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.badge.answer-x {
+  background: #fff1ed;
+  color: var(--accent-dark);
+}
+
+.item-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.muted,
+.status {
+  color: var(--muted);
+}
+
+.status.error {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.status.success {
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+.print-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.print-card {
+  min-height: 160px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 14px;
+  break-inside: avoid;
+}
+
+.print-answer {
+  width: 42px;
+  height: 42px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 900;
+}
+
+.print-answer.x {
+  background: var(--accent);
+}
+
+.empty-state {
+  display: grid;
+  gap: 6px;
+  padding: 24px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  background: #fff;
+  text-align: center;
+}
+
+@media (max-width: 860px) {
+  .app-header,
+  .app-shell {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .app-header,
+  .app-shell,
+  .manage-layout,
+  .data-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-header {
+    display: grid;
+  }
+
+  .study-card {
+    min-height: 360px;
+    padding: 18px;
+  }
+
+  .prompt {
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 520px) {
+  h1 {
+    font-size: 26px;
+  }
+
+  .stats-grid,
+  .answer-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .answer-button {
+    min-height: 76px;
+    font-size: 34px;
+  }
+
+  .button,
+  .tab,
+  .segment {
+    width: 100%;
+  }
+
+  .segmented,
+  .study-toolbar,
+  .header-actions,
+  .button-row,
+  .list-header {
+    width: 100%;
+  }
+
+  .segmented .segment {
+    width: auto;
+    flex: 1 1 0;
+  }
+
+  .list-header input {
+    max-width: none;
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .app-header,
+  .sidebar,
+  .tabs,
+  .study-toolbar,
+  .manage-layout,
+  .data-grid,
+  .print-toolbar {
+    display: none !important;
+  }
+
+  .app-shell,
+  .workspace,
+  .view,
+  #printView {
+    display: block !important;
+    padding: 0;
+  }
+
+  .print-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .print-card {
+    box-shadow: none;
+  }
+}
